@@ -1,3 +1,4 @@
+import { DateTime, Interval, Duration } from 'luxon';
 import { Command, flags } from '@oclif/command';
 
 export default class GetSegment extends Command {
@@ -22,5 +23,19 @@ export default class GetSegment extends Command {
   };
 
   async run() {
+  }
+
+  getIntervals(startDate: string, endDate?: string, intervalDuration = '15') {
+    const segmentDuration = Duration.fromISO(`PT${intervalDuration}M`);
+    const start = DateTime.fromFormat(startDate, 'D');
+    let end: DateTime;
+    if (endDate) {
+      end = DateTime.fromFormat(endDate, 'D');
+    } else {
+      const { day, month, year } = DateTime.fromMillis(Date.now()).toObject();
+      end = DateTime.fromObject({ day, month, year });
+    }
+    const interval = Interval.fromDateTimes(start, end);
+    return interval.splitBy(segmentDuration);
   }
 }
