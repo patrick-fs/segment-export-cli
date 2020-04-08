@@ -66,7 +66,7 @@ export default class GetSegment extends Command {
     }
 
     spinner.stopAndPersist({
-      text: 'Segment export complete!',
+      text: '✅ Segment export complete!',
     });
   }
 
