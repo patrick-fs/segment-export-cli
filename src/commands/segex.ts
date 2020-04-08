@@ -76,7 +76,7 @@ export default class GetSegment extends Command {
 
   async downloadFile<T extends Omit<fsApi.ExportOptions, 'time_range'>>(interval: Interval, exportOptions: T, directory = DATA_DIRECTORY) {
     const { day, month, year } = interval.start.toObject();
-    const directoryName = `${directory}/${exportOptions.segment_id}/${year}-${month}-${day}`;
+    const directoryName = `${directory}/${exportOptions.segment_id}/${this.getExportType(exportOptions.type)}/${year}-${month}-${day}`;
     mkdirp(directoryName);
 
     const start = interval.start.toISO( { includeOffset: false });
@@ -106,8 +106,8 @@ export default class GetSegment extends Command {
     return 'csv';
   }
 
-  getExportType(exportOptions: fsApi.ExportOptions) {
-    if (exportOptions.type === fsApi.ExportTypes.event) return 'event';
+  getExportType(exportOptionType: string) {
+    if (exportOptionType === fsApi.ExportTypes.event) return 'event';
     return 'individual';
   }
 

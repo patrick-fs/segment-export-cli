@@ -27,7 +27,7 @@ export interface FileUrlResponse {
 
 export enum ExportTypes {
   event = 'TYPE_EVENT',
-  individual = 'TYPE_EVENT'
+  individual = 'TYPE_INDIVIDUAL'
 }
 
 export enum ExportFormats {
