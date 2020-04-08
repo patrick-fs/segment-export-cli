@@ -20,6 +20,8 @@ The `ID` argument adn the `start` flag are required.
 ./bin/run export {ID} -s {start date as mm/dd/yyyy}
 ```
 
+## Examples
+
 ```sh-session
 $ ./bin/run export patrick@fullstory.com:4241245858598272 -s 4/6/2020
 ⠏ Getting export
