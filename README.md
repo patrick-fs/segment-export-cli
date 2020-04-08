@@ -13,6 +13,14 @@ Clone this repo and
 npm install
 ```
 
+Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json`, and add your FullStory API key.
+
+```JSON
+{
+  "API_KEY": "your key here"
+}
+```
+
 # Usage
 
 The `ID` argument adn the `start` flag are required.
