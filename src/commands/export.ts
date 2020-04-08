@@ -39,7 +39,7 @@ export default class GetSegment extends Command {
     // or choose a default start...
 
     const intervals = this.getIntervals(flags.start, flags.end)
-    let downloads: Promise<any>[] = []
+    let downloads: Promise<void>[] = []
 
     const spinner = ora('Getting export').start()
     spinner.color = 'yellow'
