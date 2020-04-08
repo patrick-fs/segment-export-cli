@@ -54,8 +54,8 @@ export default class GetSegment extends Command {
       try {
         downloads.push(this.downloadFile(intervals[i], exportOptions, flags.directory));
         if (i % BATCH_SIZE === 0) {
-          spinner.text = `downloaded: ${i}/${intervals.length}`;
           await Promise.all(downloads);
+          spinner.text = `downloaded: ${i}/${intervals.length}`;
           downloads = [];
         }
       } catch (e) {
