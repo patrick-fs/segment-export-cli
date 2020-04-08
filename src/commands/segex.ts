@@ -47,12 +47,18 @@ export default class GetSegment extends Command {
     }
     
     for (let i = 0; i < intervals.length; i++) {
-      downloads.push(this.downloadFile(intervals[i], exportOptions, flags.directory));
-      if (i % BATCH_SIZE === 0) {
-        spinner.text = `downloaded: ${i}/${intervals.length}`;
-        await Promise.all(downloads);
+      try {
+        downloads.push(this.downloadFile(intervals[i], exportOptions, flags.directory));
+        if (i % BATCH_SIZE === 0) {
+          spinner.text = `downloaded: ${i}/${intervals.length}`;
+          await Promise.all(downloads);
+          downloads = [];
+        }
+      } catch (e) {
+        console.log(`failed to download files: ${e}`);
         downloads = [];
       }
+      
     }
 
     spinner.stopAndPersist({
@@ -88,11 +94,14 @@ export default class GetSegment extends Command {
         start: `${start}Z`,
         end: `${end}Z`,
       }
-    });
+    }).catch(e => { console.error(`failed to start export: ${e}`); throw e });
 
-    const opComplete = await this.pollUntilComplete(exportResp.operationId);
-    const fileUrl = await fsApi.getExportFileURL(opComplete.searchExportId);
-    const fileStream = await fsApi.getExportFileStream(fileUrl);
+    const opComplete = await this.pollUntilComplete(exportResp.operationId)
+      .catch(e => { console.error(`failed to poll operations: ${e}`); throw e });
+    const fileUrl = await fsApi.getExportFileURL(opComplete.searchExportId)
+      .catch(e => { console.error(`failed to get export file url: ${e}`); throw e });
+    const fileStream = await fsApi.getExportFileStream(fileUrl)
+      .catch(e => { console.error(`failed to get export file stream: ${e}`); throw e });
     const writeStream = fs.createWriteStream(
       `${directoryName}/${start}.${this.getFileExtension(exportOptions.format)}`,
       { encoding: 'utf-8' });
