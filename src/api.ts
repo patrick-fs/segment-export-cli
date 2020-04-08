@@ -35,6 +35,7 @@ export enum ExportFormats {
   csv = 'FORMAT_CSV'
 }
 
+// TODO: export this init function so that clients can actually set these parameters
 const initApi = ({apiKey, baseURL = 'https://api.staging.fullstory.com'}: { apiKey: string; baseURL?: string}) => {
   return axios.create({
     baseURL: baseURL,
@@ -46,6 +47,7 @@ const initApi = ({apiKey, baseURL = 'https://api.staging.fullstory.com'}: { apiK
   })
 }
 
+// NOTE: don't intialize like this once initApi is exported
 const api = initApi({apiKey: config().API_KEY})
 
 export const startExport = async (options: ExportOptions) => {
