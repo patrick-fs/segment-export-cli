@@ -23,7 +23,7 @@ Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json
 
 # Usage
 
-The `ID` argument adn the `start` flag are required.
+The `ID` argument and the `start` flag are required.
 ```
 ./bin/run export {ID} -s {start date as mm/dd/yyyy}
 ```
