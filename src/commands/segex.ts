@@ -127,7 +127,7 @@ export default class GetSegment extends Command {
         try {
           operationsResp = await fsApi.getOperation(operationId);
         } catch (err) {
-          return reject(err);
+          return reject(`failed to get operation: ${err}`);
         }
         if (operationsResp.state === 'COMPLETED') {
           clearInterval(id);
