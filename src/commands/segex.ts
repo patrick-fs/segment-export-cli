@@ -11,7 +11,7 @@ const DATA_DIRECTORY = './data';
 
 export default class GetSegment extends Command {
   static args = [
-    { name: 'id' },
+    { name: 'id', required: true },
   ];
 
   static flags = {
