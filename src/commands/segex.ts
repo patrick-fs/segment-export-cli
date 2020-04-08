@@ -11,7 +11,11 @@ const DATA_DIRECTORY = './data';
 
 export default class GetSegment extends Command {
   static args = [
-    { name: 'id', required: true },
+    { 
+      name: 'id',
+      required: true,
+      description: 'segment id of the segment you created in FullStory'
+    },
   ];
 
   static flags = {
@@ -26,12 +30,12 @@ export default class GetSegment extends Command {
       if (i === 'event') return fsApi.ExportTypes.event;
       return fsApi.ExportTypes.individual;
     }}),
-    directory: flags.string({char: 'd', description: 'location of output directory', default: DATA_DIRECTORY }),
+    directory: flags.string({char: 'd', description: 'location of the output directory', default: DATA_DIRECTORY }),
   };
 
   async run() {
     const { args, flags } = this.parse(GetSegment);
-    // TODO: gaurd flags and args ?
+    // TODO: validate flags and args formats
     // or choose a default start...
     
     const intervals = this.getIntervals(flags.start, flags.end);
