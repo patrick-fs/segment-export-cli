@@ -20,6 +20,11 @@ export interface OperationResponse {
   }
 }
 
+export interface FileUrlResponse {
+  location: string,
+  expires: string,
+}
+
 const initApi = ({ apiKey, baseURL = 'https://api.staging.fullstory.com'} : { apiKey: string, baseURL?: string}) => {
   return axios.create({
     baseURL: baseURL,
@@ -44,6 +49,10 @@ export const getOperation = async (operationId: string) => {
 };
 
 export const getExportFileURL = async (exportId: string) => {
-  const downloadResp =  await api.get<{location: string, expires: string}>(`/search/v1/exports/${exportId}/results`);
+  const downloadResp =  await api.get<FileUrlResponse>(`/search/v1/exports/${exportId}/results`);
   return downloadResp.data;
-}
+};
+
+export const getExportFileStream = async (fileUrl: FileUrlResponse) => {
+  return await axios.get(fileUrl.location, { responseType: 'stream' });
+};
