@@ -25,6 +25,16 @@ export interface FileUrlResponse {
   expires: string,
 }
 
+export enum ExportTypes {
+  event = 'TYPE_EVENT',
+  individual = 'TYPE_EVENT'
+}
+
+export enum ExportFormats {
+  json = 'FORMAT_NDJSON',
+  csv = 'FORMAT_CSV'
+}
+
 const initApi = ({ apiKey, baseURL = 'https://api.staging.fullstory.com'} : { apiKey: string, baseURL?: string}) => {
   return axios.create({
     baseURL: baseURL,

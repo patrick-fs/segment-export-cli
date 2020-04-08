@@ -19,12 +19,12 @@ export default class GetSegment extends Command {
     start: flags.string({char: 's', description: 'start of query: mm/dd/yyyy', required: true }),
     end: flags.string({char: 'e', description: 'end of query: mm/dd/yyyy' }),
     format: flags.string({ char: 'f', options: ['JSON', 'CSV'], default: 'FORMAT_CSV', parse: i => {
-      if (i === 'JSON') return 'FORMAT_NDJSON';
-      return 'FORMAT_CSV';
+      if (i === 'JSON') return fsApi.ExportFormats.json;
+      return fsApi.ExportFormats.csv;
     }}),
-    type: flags.string({ char: 't', options: ['event', 'individual'], default: 'TYPE_EVENT', parse: i => {
-      if (i === 'event') return 'TYPE_EVENT';
-      return 'TYPE_INDIVIDUAL';
+    type: flags.string({ char: 't', options: ['event', 'individual'], default: fsApi.ExportTypes.event, parse: i => {
+      if (i === 'event') return fsApi.ExportTypes.event;
+      return fsApi.ExportTypes.individual;
     }}),
     directory: flags.string({char: 'd', description: 'location of output directory', default: DATA_DIRECTORY }),
   };
@@ -102,10 +102,13 @@ export default class GetSegment extends Command {
   }
 
   getFileExtension(format: string) {
-    if (format === 'FORMAT_NDJSON') {
-      return 'json';
-    }
+    if (format === fsApi.ExportFormats.json) return 'json';
     return 'csv';
+  }
+
+  getExportType(exportOptions: fsApi.ExportOptions) {
+    if (exportOptions.type === fsApi.ExportTypes.event) return 'event';
+    return 'individual';
   }
 
   pollUntilComplete(operationId: string): Promise<{searchExportId: string, expires: string}> {
