@@ -79,7 +79,7 @@ The CLI creates files in the `data` directory at the root of this project by def
 ```
 data
 ├── {segment id}
-│   └── {segment type}
+│   └── {segment type event|individual}
 │       └── {date}
 │           ├── {segment export file CSV|JSON}
 ```
