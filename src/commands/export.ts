@@ -60,11 +60,10 @@ export default class GetSegment extends Command {
         downloads.push(this.downloadFile(intervals[i], exportOptions, flags.directory))
         if (i > 0 && i % BATCH_SIZE === 0) {
           await Promise.all(downloads) // eslint-disable-line no-await-in-loop
-          spinner.text = `downloaded: ${i}/${intervals.length}`
+          spinner.text = `downloaded: ${i}/${intervals.length}\n`
           downloads = []
         }
       } catch (error) {
-        console.error(`failed to download files: ${error}`)
         downloads = []
       }
     }
@@ -79,7 +78,8 @@ export default class GetSegment extends Command {
   }
 
   getEndDate(endDate?: string) {
-    return this.getDate(1, endDate);
+      // NOTE: There is a 24-hour delay before events are available to segement export
+      return this.getDate(1, endDate);
   }
 
   getDate(daysSince: number, date?: string) {
@@ -88,7 +88,6 @@ export default class GetSegment extends Command {
       dateTime = DateTime.fromFormat(date, 'D')
     } else {
       const {day, month, year} = DateTime.fromMillis(Date.now()).toObject()
-      // NOTE: There is a 24-hour delay before events are available to segement export
       dateTime = DateTime.fromObject({day, month, year}).minus({ days: daysSince })
     }
     
