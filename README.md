@@ -25,7 +25,7 @@ Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json
 
 Segments are created by saving FullStory searches. More information can be found on FullStory's [help site](https://help.fullstory.com/hc/en-us/articles/360020622754-Can-I-save-searches-that-I-use-frequently-create-a-segment-)
 
-![image](https://user-images.githubusercontent.com/45576380/78920688-c7292400-7a61-11ea-850d-be7d9c8a648a.png)
+![image](https://user-images.githubusercontent.com/45576380/78920688-c7292400-7a61-11ea-850d-be7d9c8a648a.png =250x)
 
 Once you've created a segment in FullStory, you can find the ID in the URL when you're viewing the segment.
 
