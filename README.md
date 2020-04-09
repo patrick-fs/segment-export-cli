@@ -21,12 +21,34 @@ Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json
 }
 ```
 
+# Finding a Segment Id in FullStory
+
+Segments are created by saving FullStory searches. More information can be found on FullStory's [help site](https://help.fullstory.com/hc/en-us/articles/360020622754-Can-I-save-searches-that-I-use-frequently-create-a-segment-)
+
+![image](https://user-images.githubusercontent.com/45576380/78920688-c7292400-7a61-11ea-850d-be7d9c8a648a.png)
+
+Once you've created a segment in FullStory, you can find the ID in the URL when you're viewing the segment.
+
+## Example segment IDs
+
+Segment IDs are **in bold**
+
+### Custom segment
+
+htt<span>ps</span>://app.staging.fullstory.com/ui/thefullstory.com/segments/**patrick@fullstory.com:4241245858598272**/people/0
+
+### Standard segment
+
+htt<span>ps</span>://app.staging.fullstory.com/ui/thefullstory.com/segments/**rageClicks**/people/0
+
 # Usage
 
 The `ID` argument and the `start` flag are required.
 ```
 ./bin/run export {ID} -s {start date as mm/dd/yyyy}
 ```
+
+![image](https://user-images.githubusercontent.com/45576380/78919346-cbecd880-7a5f-11ea-867a-060a0db587da.png)
 
 ## Examples
 
@@ -37,16 +59,17 @@ $ ./bin/run (-v|--version|version)
 segex/0.1.0 darwin-x64 node-v10.16.0
 $ ./bin/run --help export
 USAGE
-  $ segex export ID
+  $ segex export [ID]
 
 ARGUMENTS
-  ID  segment id of the segment you created in FullStory
+  ID  [default: everyone] segment id of the segment to be downloaded from FullStory
 
 OPTIONS
-  -d, --directory=directory    [default: ./data] location of the output directory
-  -e, --end=end                end of query: mm/dd/yyyy
-  -f, --format=JSON|CSV        [default: FORMAT_CSV]
-  -h, --help                   show CLI help
-  -s, --start=start            (required) start of query: mm/dd/yyyy
-  -t, --type=event|individual  [default: TYPE_EVENT]
+  -d, --directory=directory     [default: ./data] location of the output directory
+  -e, --end=end                 end of query: mm/dd/yyyy, defaults to yesterday (the most recent day that data is available)
+  -f, --format=JSON|CSV         [default: FORMAT_CSV]
+  -h, --help                    show CLI help
+  -i, --interval=5|10|15|30|60  [default: 15] time increments for each downloaded file
+  -s, --start=start             start of query: mm/dd/yyyy, defaults to 30 days in the past
+  -t, --type=event|individual   [default: TYPE_EVENT]
 ```
