@@ -47,8 +47,7 @@ const initApi = ({apiKey, baseURL = 'https://api.staging.fullstory.com'}: { apiK
   })
 }
 
-// NOTE: don't intialize like this once initApi is exported
-const api = initApi({apiKey: config().API_KEY})
+const api = initApi({apiKey: config().API_KEY, baseURL: config().API_DOMAIN})
 
 export const startExport = async (options: ExportOptions) => {
   const exportResp = await api.post<{operationId: string}>('/segments/v1/exports', options)
