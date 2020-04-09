@@ -92,8 +92,10 @@ data
 
 In this example, you see the result of running two commands:
 
-`./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020` outputs to `data/adam@fullstory.com:4721245852598272`
+`./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020 -t event` outputs to `data/adam@fullstory.com:4721245852598272/event`
 
-`./bin/run export` outputs to `data/everyone`
+`./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020 -t individual` outputs to `data/adam@fullstory.com:4721245852598272/individual`
+
+`./bin/run export` outputs to `data/everyone/event`
 
 <img src="https://user-images.githubusercontent.com/45576380/78919346-cbecd880-7a5f-11ea-867a-060a0db587da.png" width="550px" />
