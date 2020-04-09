@@ -17,7 +17,8 @@ Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json
 
 ```JSON
 {
-  "API_KEY": "your key here"
+  "API_KEY": "your key here",
+  "API_DOMAIN" : "https://api.fullstory.com"
 }
 ```
 
