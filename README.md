@@ -61,7 +61,7 @@ data
 │           ├── {segment export file CSV|JSON}
 ```
 
-<img src="https://user-images.githubusercontent.com/45576380/78919346-cbecd880-7a5f-11ea-867a-060a0db587da.png" width="250px" />
+<img src="https://user-images.githubusercontent.com/45576380/78919346-cbecd880-7a5f-11ea-867a-060a0db587da.png" width="550px" />
 
 ## Examples
 
