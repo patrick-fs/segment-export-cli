@@ -25,30 +25,43 @@ Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json
 
 Segments are created by saving FullStory searches. More information can be found on FullStory's [help site](https://help.fullstory.com/hc/en-us/articles/360020622754-Can-I-save-searches-that-I-use-frequently-create-a-segment-)
 
-![image](https://user-images.githubusercontent.com/45576380/78920688-c7292400-7a61-11ea-850d-be7d9c8a648a.png =250x)
+<img src="https://user-images.githubusercontent.com/45576380/78920688-c7292400-7a61-11ea-850d-be7d9c8a648a.png" witdh="250px" />
 
 Once you've created a segment in FullStory, you can find the ID in the URL when you're viewing the segment.
 
 ## Example segment IDs
 
-Segment IDs are **in bold**
-
 ### Custom segment
+
+The ID in this example is "patric<span>k@f</span>ullstory.com:4241245858598272"
 
 htt<span>ps</span>://app.staging.fullstory.com/ui/thefullstory.com/segments/**patric<span>k@f</span>ullstory.com:4241245858598272**/people/0
 
 ### Standard segment
 
+The ID in this example is "rageClicks"
+
 htt<span>ps</span>://app.staging.fullstory.com/ui/thefullstory.com/segments/**rageClicks**/people/0
 
 # Usage
 
-The `ID` argument and the `start` flag are required.
 ```
-./bin/run export {ID} -s {start date as mm/dd/yyyy}
+./bin/run export
 ```
 
-![image](https://user-images.githubusercontent.com/45576380/78919346-cbecd880-7a5f-11ea-867a-060a0db587da.png)
+## Data directory structure
+
+The CLI creates files in the `data` directory at the root of this project by default. The directory structure is:
+
+```
+data
+├── {segment id}
+│   └── {segment type}
+│       └── {date}
+│           ├── {segment export file CSV|JSON}
+```
+
+<img src="https://user-images.githubusercontent.com/45576380/78919346-cbecd880-7a5f-11ea-867a-060a0db587da.png" witdh="250px" />
 
 ## Examples
 
