@@ -20,7 +20,7 @@ export default class GetSegment extends Command {
 
   static flags = {
     help: flags.help({char: 'h'}),
-    start: flags.string({char: 's', description: 'start of query: mm/dd/yyyy', required: true}),
+    start: flags.string({char: 's', description: 'start of query: mm/dd/yyyy'}),
     end: flags.string({char: 'e', description: 'end of query: mm/dd/yyyy'}),
     format: flags.string({char: 'f', options: ['JSON', 'CSV'], default: 'FORMAT_CSV', parse: i => {
       if (i === 'JSON') return fsApi.ExportFormats.json
@@ -38,11 +38,12 @@ export default class GetSegment extends Command {
     // TODO: validate flags and args formats
     // or choose a default start...
     
+    const start = this.getStartDate(flags.start);
     const end = this.getEndDate(flags.end);
-    const intervals = this.getIntervals(flags.start, end)
+    const intervals = this.getIntervals(start, end)
     let downloads: Promise<void>[] = []
 
-    console.log(`dowloading ${args.id}, starting from ${flags.start}, ending ${end}`);
+    console.log(`dowloading ${args.id}, starting from ${start}, ending ${end}`);
 
     const spinner = ora('Getting export').start()
     spinner.color = 'yellow'
@@ -72,17 +73,25 @@ export default class GetSegment extends Command {
     })
   }
 
+  getStartDate(startDate?: string) {
+    return this.getDate(30, startDate);
+  }
+
   getEndDate(endDate?: string) {
-    let end: DateTime
-    if (endDate && endDate !== '') {
-      end = DateTime.fromFormat(endDate, 'D')
+    return this.getDate(1, endDate);
+  }
+
+  getDate(daysSince: number, date?: string) {
+    let dateTime: DateTime
+    if (date && date !== '') {
+      dateTime = DateTime.fromFormat(date, 'D')
     } else {
       const {day, month, year} = DateTime.fromMillis(Date.now()).toObject()
       // NOTE: There is a 24-hour delay before events are available to segement export
-      end = DateTime.fromObject({day, month, year}).minus({ days: 1 })
+      dateTime = DateTime.fromObject({day, month, year}).minus({ days: daysSince })
     }
     
-    return`${end.month}/${end.day}/${end.year}`;
+    return`${dateTime.month}/${dateTime.day}/${dateTime.year}`;
   }
 
   getIntervals(startDate: string, endDate: string, intervalDuration = '15') {
