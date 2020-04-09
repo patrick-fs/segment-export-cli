@@ -1,19 +1,14 @@
 segex
 =====
 
-Provide a FullStory segment id and time range to download data for that segment.
+Download FullStory event and individual data for specific segments.
 
 `segex` is not currently distrbuted on NPM, so you'll have to pull down this code and execute it locally with `./bin/run`.
 
 # Install
 
-Clone this repo and
-
-```
-npm install
-```
-
-Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json`, and add your FullStory API key.
+- Clone this repo and `npm install` in the root directory (the same directory that contains `package.json`)
+- Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json`, and add your FullStory API key.
 
 ```JSON
 {
