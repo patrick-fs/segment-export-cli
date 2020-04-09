@@ -94,11 +94,15 @@ outputs to
 
 `data/adam@fullstory.com:4721245852598272/event`
 
+<hr />
+
 `./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020 -t individual`
 
 outputs to
 
 `data/adam@fullstory.com:4721245852598272/individual`
+
+<hr />
 
 `./bin/run export` outputs to `data/everyone/event`
 
