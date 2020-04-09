@@ -1,7 +1,7 @@
 segex
 =====
 
-FullStory segment export CLI
+Provide a FullStory segment id and time range to download data for that segment.
 
 `segex` is not currently distrbuted on NPM, so you'll have to pull down this code and execute it locally with `./bin/run`.
 
@@ -49,6 +49,26 @@ htt<span>ps</span>://app.staging.fullstory.com/ui/thefullstory.com/segments/**ra
 ./bin/run export
 ```
 
+## Command arguments and flags
+
+```sh-session
+$ ./bin/run --help export
+USAGE
+  $ segex export [ID]
+
+ARGUMENTS
+  ID  [default: everyone] segment id of the segment to be downloaded from FullStory
+
+OPTIONS
+  -d, --directory=directory     [default: ./data] location of the output directory
+  -e, --end=end                 end of query: mm/dd/yyyy, defaults to yesterday (the most recent day that data is available)
+  -f, --format=JSON|CSV         [default: FORMAT_CSV]
+  -h, --help                    show CLI help
+  -i, --interval=5|10|15|30|60  [default: 15] time increments for each downloaded file
+  -s, --start=start             start of query: mm/dd/yyyy, defaults to 30 days in the past
+  -t, --type=event|individual   [default: TYPE_EVENT]
+```
+
 ## Data directory structure
 
 The CLI creates files in the `data` directory at the root of this project by default. The directory structure is:
@@ -70,27 +90,3 @@ In this example, you see the result of running two commands:
 `./bin/run export` outputs to `data/everyone`
 
 <img src="https://user-images.githubusercontent.com/45576380/78919346-cbecd880-7a5f-11ea-867a-060a0db587da.png" width="550px" />
-
-## Command arguments and flags
-
-```sh-session
-$ ./bin/run export patrick@fullstory.com:4241245858598272 -s 4/6/2020
-⠏ Getting export
-$ ./bin/run (-v|--version|version)
-segex/0.1.0 darwin-x64 node-v10.16.0
-$ ./bin/run --help export
-USAGE
-  $ segex export [ID]
-
-ARGUMENTS
-  ID  [default: everyone] segment id of the segment to be downloaded from FullStory
-
-OPTIONS
-  -d, --directory=directory     [default: ./data] location of the output directory
-  -e, --end=end                 end of query: mm/dd/yyyy, defaults to yesterday (the most recent day that data is available)
-  -f, --format=JSON|CSV         [default: FORMAT_CSV]
-  -h, --help                    show CLI help
-  -i, --interval=5|10|15|30|60  [default: 15] time increments for each downloaded file
-  -s, --start=start             start of query: mm/dd/yyyy, defaults to 30 days in the past
-  -t, --type=event|individual   [default: TYPE_EVENT]
-```
