@@ -86,8 +86,6 @@ data
 
 ### Output examples
 
-In this example, you see the result of running two commands:
-
 `./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020 -t event`
 
 outputs to
