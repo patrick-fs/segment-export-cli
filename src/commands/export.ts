@@ -37,9 +37,12 @@ export default class GetSegment extends Command {
     const {args, flags} = this.parse(GetSegment)
     // TODO: validate flags and args formats
     // or choose a default start...
-
-    const intervals = this.getIntervals(flags.start, flags.end)
+    
+    const end = this.getEndDate(flags.end);
+    const intervals = this.getIntervals(flags.start, end)
     let downloads: Promise<void>[] = []
+
+    console.log(`dowloading ${args.id}, starting from ${flags.start}, ending ${end}`);
 
     const spinner = ora('Getting export').start()
     spinner.color = 'yellow'
@@ -69,16 +72,24 @@ export default class GetSegment extends Command {
     })
   }
 
-  getIntervals(startDate: string, endDate?: string, intervalDuration = '15') {
-    const segmentDuration = Duration.fromISO(`PT${intervalDuration}M`)
-    const start = DateTime.fromFormat(startDate, 'D')
+  getEndDate(endDate?: string) {
     let end: DateTime
     if (endDate && endDate !== '') {
       end = DateTime.fromFormat(endDate, 'D')
     } else {
       const {day, month, year} = DateTime.fromMillis(Date.now()).toObject()
-      end = DateTime.fromObject({day, month, year})
+      // NOTE: There is a 24-hour delay before events are available to segement export
+      end = DateTime.fromObject({day, month, year}).minus({ days: 1 })
     }
+    
+    return`${end.month}/${end.day}/${end.year}`;
+  }
+
+  getIntervals(startDate: string, endDate: string, intervalDuration = '15') {
+    const segmentDuration = Duration.fromISO(`PT${intervalDuration}M`)
+    const start = DateTime.fromFormat(startDate, 'D')
+    const end = DateTime.fromFormat(endDate, 'D')
+    
     const interval = Interval.fromDateTimes(start, end)
     return interval.splitBy(segmentDuration)
   }
