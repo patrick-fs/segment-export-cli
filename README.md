@@ -19,11 +19,11 @@ Download FullStory event and individual data for specific segments.
 
 # Finding a Segment Id in FullStory
 
-Segments are created by saving FullStory searches. More information can be found on FullStory's [help site](https://help.fullstory.com/hc/en-us/articles/360020622754-Can-I-save-searches-that-I-use-frequently-create-a-segment-)
+Segments are created by saving FullStory searches. More information can be found on FullStory's [help site](https://help.fullstory.com/hc/en-us/articles/360020622754-Can-I-save-searches-that-I-use-frequently-create-a-segment-).
 
 <img src="https://user-images.githubusercontent.com/45576380/78920688-c7292400-7a61-11ea-850d-be7d9c8a648a.png" width="250px" />
 
-Once you've created a segment in FullStory, you can find the ID in the URL when you're viewing the segment.
+Once you've created a segment in FullStory, you can find the segment ID in the URL when you're viewing the segment.
 
 <img src="https://user-images.githubusercontent.com/45576380/78924906-8ed91400-7a68-11ea-80ff-e9f5525cee82.png" width="860px" />
 
@@ -88,9 +88,13 @@ data
 
 In this example, you see the result of running two commands:
 
-`./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020 -t event` outputs to `data/adam@fullstory.com:4721245852598272/event`
+`./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020 -t event`
+outputs to
+`data/adam@fullstory.com:4721245852598272/event`
 
-`./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020 -t individual` outputs to `data/adam@fullstory.com:4721245852598272/individual`
+`./bin/run export adam@fullstory.com:4721245852598272 -s 4/6/2020 -e 4/8/2020 -t individual`
+outputs to
+`data/adam@fullstory.com:4721245852598272/individual`
 
 `./bin/run export` outputs to `data/everyone/event`
 
