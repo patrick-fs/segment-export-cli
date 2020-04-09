@@ -35,7 +35,7 @@ Segment IDs are **in bold**
 
 ### Custom segment
 
-htt<span>ps</span>://app.staging.fullstory.com/ui/thefullstory.com/segments/**patrick@fullstory.com:4241245858598272**/people/0
+htt<span>ps</span>://app.staging.fullstory.com/ui/thefullstory.com/segments/**patric<span>k@f</span>ullstory.com:4241245858598272**/people/0
 
 ### Standard segment
 
