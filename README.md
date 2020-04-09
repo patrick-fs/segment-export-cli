@@ -46,7 +46,7 @@ htt<span>ps</span>://app.staging.fullstory.com/ui/thefullstory.com/segments/**ra
 # Usage
 
 ```
-./bin/run export
+$ ./bin/run export
 ```
 
 ## Command arguments and flags
@@ -68,6 +68,11 @@ OPTIONS
   -s, --start=start             start of query: mm/dd/yyyy, defaults to 30 days in the past
   -t, --type=event|individual   [default: TYPE_EVENT]
 ```
+
+- `--type event` returns event records: each row is an individual event recorded by FullStory. You can find the data dictionary for
+event records at https://developer.fullstory.com/get-data-export.
+- `--type individual` returns individual records: each row represents an identified user with some aggregate metrics about their behavior on your site.
+- `--interval` controls how large your file sizes are: the smaller the interval the smaller the file size, and the greater the number of files.
 
 ## Data directory structure
 
