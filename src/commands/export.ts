@@ -13,15 +13,15 @@ export default class GetSegment extends Command {
   static args = [
     {
       name: 'id',
-      description: 'segment id of the segment you created in FullStory',
+      description: 'segment id of the segment to be downloaded from FullStory',
       default: 'everyone',
     },
   ];
 
   static flags = {
     help: flags.help({char: 'h'}),
-    start: flags.string({char: 's', description: 'start of query: mm/dd/yyyy'}),
-    end: flags.string({char: 'e', description: 'end of query: mm/dd/yyyy'}),
+    start: flags.string({char: 's', description: 'start of query: mm/dd/yyyy, defaults to 30 days in the past'}),
+    end: flags.string({char: 'e', description: 'end of query: mm/dd/yyyy, defaults to yesterday (the most recent day that data is available)'}),
     format: flags.string({char: 'f', options: ['JSON', 'CSV'], default: 'FORMAT_CSV', parse: i => {
       if (i === 'JSON') return fsApi.ExportFormats.json
       return fsApi.ExportFormats.csv
@@ -31,6 +31,7 @@ export default class GetSegment extends Command {
       return fsApi.ExportTypes.individual
     }}),
     directory: flags.string({char: 'd', description: 'location of the output directory', default: DATA_DIRECTORY}),
+    interval: flags.string({char: 'i', options: ['5', '10', '15', '30', '60'], default: '15', description: 'time increments for each downloaded file'})
   };
 
   async run() {
@@ -40,7 +41,7 @@ export default class GetSegment extends Command {
     
     const start = this.getStartDate(flags.start);
     const end = this.getEndDate(flags.end);
-    const intervals = this.getIntervals(start, end)
+    const intervals = this.getIntervals(start, end, flags.interval)
     let downloads: Promise<void>[] = []
 
     console.log(`dowloading ${args.id}, starting from ${start}, ending ${end}`);
