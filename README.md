@@ -29,7 +29,7 @@ Segments are created by saving FullStory searches. More information can be found
 
 Once you've created a segment in FullStory, you can find the ID in the URL when you're viewing the segment.
 
-<img src="https://user-images.githubusercontent.com/45576380/78924906-8ed91400-7a68-11ea-80ff-e9f5525cee82.png" width="700px" />
+<img src="https://user-images.githubusercontent.com/45576380/78924906-8ed91400-7a68-11ea-80ff-e9f5525cee82.png" width="860px" />
 
 ## Example segment IDs
 
