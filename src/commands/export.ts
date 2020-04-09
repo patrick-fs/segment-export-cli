@@ -13,8 +13,8 @@ export default class GetSegment extends Command {
   static args = [
     {
       name: 'id',
-      required: true,
       description: 'segment id of the segment you created in FullStory',
+      default: 'everyone',
     },
   ];
 
