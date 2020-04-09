@@ -81,7 +81,7 @@ data
 ├── {segment id}
 │   └── {segment type event|individual}
 │       └── {date}
-│           ├── {segment export file CSV|JSON}
+│           ├── {segment export file csv|json}
 ```
 
 ### Output examples
