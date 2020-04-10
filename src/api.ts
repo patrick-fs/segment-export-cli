@@ -36,7 +36,7 @@ export enum ExportFormats {
 }
 
 // TODO: export this init function so that clients can actually set these parameters
-const initApi = ({apiKey, baseURL = 'https://api.staging.fullstory.com'}: { apiKey: string; baseURL?: string}) => {
+const initApi = ({apiKey, baseURL}: { apiKey: string; baseURL: string}) => {
   return axios.create({
     baseURL: baseURL,
     timeout: 1000,
