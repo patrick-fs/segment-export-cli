@@ -7,6 +7,6 @@
 /yarn.lock
 node_modules
 .config/fullstory.json
-.config/config.staging.json
+.config/config.*.json
 data
 .DS_Store
