@@ -3,7 +3,7 @@ segex
 
 `segex` is a command line interface that lets up download FullStory "event" and "individual" data for specific segments.
 
-`segex` is not currently distributed on NPM, so you'll have to pull down this code and execute it locally with `./bin/run`.
+`segex` is not currently distributed on NPM, so you'll have to pull down this code and execute it locally with `./bin/run`. You'll need to have [node JS](https://nodejs.org/en/) installed on your machine to run `segex`.
 
 # Install
 
