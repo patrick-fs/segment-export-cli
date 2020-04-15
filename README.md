@@ -1,7 +1,7 @@
 segex
 =====
 
-Download FullStory "event" and "individual" data for specific segments.
+`segex` is a command line interface that lets up download FullStory "event" and "individual" data for specific segments.
 
 `segex` is not currently distributed on NPM, so you'll have to pull down this code and execute it locally with `./bin/run`.
 
