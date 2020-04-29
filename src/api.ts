@@ -50,16 +50,19 @@ const initApi = ({apiKey, baseURL}: { apiKey: string; baseURL: string}) => {
 const api = initApi({apiKey: config().API_KEY, baseURL: config().API_DOMAIN})
 
 export const startExport = async (options: ExportOptions) => {
+  console.log(`starting export at ${Date.now()}`);
   const exportResp = await api.post<{operationId: string}>('/segments/v1/exports', options)
   return exportResp.data
 }
 
 export const getOperation = async (operationId: string) => {
+  console.log(`checking operations at ${Date.now()}`);
   const operationsResp = await api.get<OperationResponse>(`/operations/v1/${operationId}`)
   return operationsResp.data
 }
 
 export const getExportFileURL = async (exportId: string) => {
+  console.log(`getting export file URL at ${Date.now()}`);
   const downloadResp =  await api.get<FileUrlResponse>(`/search/v1/exports/${exportId}/results`)
   return downloadResp.data
 }

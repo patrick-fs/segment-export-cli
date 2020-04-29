@@ -6,7 +6,7 @@ import * as ora from 'ora'
 import * as zlib from 'zlib'
 import * as fsApi from '../api'
 
-const BATCH_SIZE = 2
+const BATCH_SIZE = 1
 const DATA_DIRECTORY = './data'
 
 export default class GetSegment extends Command {
@@ -46,8 +46,8 @@ export default class GetSegment extends Command {
 
     console.log(`dowloading ${args.id}, starting from ${start}, ending ${end}`);
 
-    const spinner = ora('Getting export').start()
-    spinner.color = 'yellow'
+    //const spinner = ora('Getting export').start()
+    //spinner.color = 'yellow'
 
     const exportOptions = {
       segment_id: args.id,
@@ -57,24 +57,26 @@ export default class GetSegment extends Command {
 
     for (let i = 0; i < intervals.length; i++) {
       try {
-        downloads.push(this.downloadFile(intervals[i], exportOptions, flags.directory))
+        //downloads.push(this.downloadFile(intervals[i], exportOptions, flags.directory))
         if (i > 0 && i % BATCH_SIZE === 0) {
-          await Promise.all(downloads) // eslint-disable-line no-await-in-loop
-          spinner.text = `downloaded: ${i}/${intervals.length}\n`
+          //await Promise.all(downloads) // eslint-disable-line no-await-in-loop
+          await this.downloadFile(intervals[i], exportOptions, flags.directory);
+          //spinner.text = `downloaded: ${i}/${intervals.length}\n`
           downloads = []
         }
       } catch (error) {
         downloads = []
       }
     }
-
+/*
     spinner.stopAndPersist({
       text: '✅ Segment export complete!',
     })
+    */
   }
 
   getStartDate(startDate?: string) {
-    return this.getDate(30, startDate);
+    return this.getDate(29, startDate);
   }
 
   getEndDate(endDate?: string) {
@@ -124,12 +126,12 @@ export default class GetSegment extends Command {
 
     const opComplete = await this.pollUntilComplete(exportResp.operationId)
     .catch(error => {
-      console.error(`failed to poll operations: ${error}`)
+      console.error(`failed to poll operations for operation id: ${exportResp.operationId}: ${error}`)
       throw error
     })
     const fileUrl = await fsApi.getExportFileURL(opComplete.searchExportId)
     .catch(error => {
-      console.error(`failed to get export file url: ${error}`)
+      console.error(`failed to get export file url for export id ${opComplete.searchExportId}: ${error}`)
       throw error
     })
     const fileStream = await fsApi.getExportFileStream(fileUrl)
