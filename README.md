@@ -12,7 +12,7 @@ This tool and the underlying API is available to FullStory customers participati
 # Install
 
 - Clone this repo and `npm install` in the root directory (the same directory that contains `package.json`)
-- Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json`, and add your FullStory API key.
+- Copy and paste `.conig/fullstory-example.json`, rename it `.conig/fullstory.json`, and add your FullStory [API key](https://help.fullstory.com/hc/en-us/articles/360020624834).
 
 ```JSON
 {
