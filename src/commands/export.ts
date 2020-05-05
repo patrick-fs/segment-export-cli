@@ -7,6 +7,7 @@ import * as zlib from 'zlib'
 import * as fsApi from '../api'
 
 const DATA_DIRECTORY = './data'
+const BATCH_SIZE = 3;
 
 export default class GetSegment extends Command {
   static args = [
@@ -47,6 +48,8 @@ export default class GetSegment extends Command {
     const spinner = ora('Getting export').start()
     spinner.color = 'yellow'
 
+    let finalDownload;
+
     for await (const download of this.fetch(intervals)) {
       if (download.snoozing) {
         if (download.error) {
@@ -57,11 +60,20 @@ export default class GetSegment extends Command {
       } else {
         spinner.text = `downloaded: ${download.processedCount}/${intervals.length}\n`
       }
+      finalDownload = download;
     }
 
-    spinner.stopAndPersist({
-      text: '✅ Segment export complete!',
-    })
+    if (finalDownload?.error) {
+      spinner.stopAndPersist({
+        text: `error downloading files: ${finalDownload?.error}`,
+      })
+      console.log(finalDownload?.error);
+    } else {
+      spinner.stopAndPersist({
+        text: '✅ Segment export complete!',
+      })
+    }
+    
   }
 
   getStartDate(startDate?: string) {
@@ -108,15 +120,30 @@ export default class GetSegment extends Command {
 
     let processedCount = 0;
     let next = intervalsCopy.pop();
-    while (next !== undefined && sleepTime <= 64000) {
+
+    let downloads: Promise<void>[] = []
+
+    const pushDownloads = () => {
+      downloads = [];
+      for (let i = 0; i < BATCH_SIZE; i++) {
+        const next = intervalsCopy.pop();
+        if (next) {
+          downloads.push(this.downloadFile(next, exportOptions, flags.directory));
+        }
+      }
+    }
+    
+    pushDownloads();
+    while (downloads.length > 0 && sleepTime <= 128000) {
       try {
-        await this.downloadFile(next, exportOptions, flags.directory)
+        await Promise.all(downloads)
+        processedCount = processedCount + downloads.length
         yield {
-          processedCount: ++processedCount,
+          processedCount,
           snoozing: false,
           snoozeLength: 0
         }
-        next = intervalsCopy.pop();
+        pushDownloads();
         sleepTime = sleepStart;
       } catch (error) {
         if (error.response && error.response.status === 429) {
@@ -137,6 +164,16 @@ export default class GetSegment extends Command {
         sleepTime = sleepTime * 2;
       }      
     }
+
+    if (processedCount < intervals.length) {
+      yield {
+        processedCount,
+        snoozing: false,
+        snoozeLength: 0,
+        error: new Error('did not complete all downloads')
+      }
+    }
+
   }
 
   sleep(milliseconds: number) {
