@@ -6,14 +6,7 @@ import * as ora from 'ora'
 import * as zlib from 'zlib'
 import * as fsApi from '../api'
 
-const BATCH_SIZE = 2
 const DATA_DIRECTORY = './data'
-
-interface FetchResult {
-  processedCount: number;
-  snoozing: boolean;
-  snoozeLength: number;
-}
 
 export default class GetSegment extends Command {
   static args = [
@@ -48,36 +41,19 @@ export default class GetSegment extends Command {
     const start = this.getStartDate(flags.start);
     const end = this.getEndDate(flags.end);
     const intervals = this.getIntervals(start, end, flags.interval)
-    let downloads: Promise<void>[] = []
 
     console.log(`dowloading ${args.id}, starting from ${start}, ending ${end}`);
 
     const spinner = ora('Getting export').start()
     spinner.color = 'yellow'
 
-    const exportOptions = {
-      segment_id: args.id,
-      type: flags.type,
-      format: flags.format,
-    }
-     /*
-    for (let i = 0; i < intervals.length; i++) {
-      try {
-        downloads.push(this.downloadFile(intervals[i], exportOptions, flags.directory))
-        if (i > 0 && i % BATCH_SIZE === 0) {
-          await Promise.all(downloads) // eslint-disable-line no-await-in-loop
-          spinner.text = `downloaded: ${i}/${intervals.length}\n`
-          downloads = []
-        }
-      } catch (error) {
-        downloads = []
-      }
-    }
-    */
-
     for await (const download of this.fetch(intervals)) {
       if (download.snoozing) {
-        spinner.text = `hit API request quota, snoozing for ${download.snoozeLength/1000} seconds`;
+        if (download.error) {
+          spinner.text = `an error occurred: ${download.error}, snoozing for ${download.snoozeLength/1000} seconds and trying again`
+        } else {
+          spinner.text = `hit API request quota, snoozing for ${download.snoozeLength/1000} seconds`;
+        }
       } else {
         spinner.text = `downloaded: ${download.processedCount}/${intervals.length}\n`
       }
@@ -125,12 +101,14 @@ export default class GetSegment extends Command {
       type: flags.type,
       format: flags.format,
     }
+    const sleepStart = 2000;
 
     const intervalsCopy = intervals.slice();
+    let sleepTime = sleepStart;
 
     let processedCount = 0;
     let next = intervalsCopy.pop();
-    while (next !== undefined) {
+    while (next !== undefined && sleepTime <= 64000) {
       try {
         await this.downloadFile(next, exportOptions, flags.directory)
         yield {
@@ -139,18 +117,30 @@ export default class GetSegment extends Command {
           snoozeLength: 0
         }
         next = intervalsCopy.pop();
+        sleepTime = sleepStart;
       } catch (error) {
         if (error.response && error.response.status === 429) {
           yield {
             processedCount,
             snoozing: true,
-            snoozeLength: 2000
+            snoozeLength: sleepTime
           }
-          console.log('too many requests, go to sleep');
+        } else {
+          yield {
+            processedCount,
+            snoozing: true,
+            snoozeLength: sleepTime,
+            error
+          }
         }
-        console.log(error);
+        await this.sleep(sleepTime);
+        sleepTime = sleepTime * 2;
       }      
     }
+  }
+
+  sleep(milliseconds: number) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
   }
 
   async downloadFile<T extends Omit<fsApi.ExportOptions, 'time_range'>>(interval: Interval, exportOptions: T, directory = DATA_DIRECTORY) {
