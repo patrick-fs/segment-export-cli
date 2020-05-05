@@ -47,6 +47,8 @@ export default class GetSegment extends Command {
     const spinner = ora('Getting export').start()
     spinner.color = 'yellow'
 
+    let finalDownload;
+
     for await (const download of this.fetch(intervals)) {
       if (download.snoozing) {
         if (download.error) {
@@ -57,11 +59,19 @@ export default class GetSegment extends Command {
       } else {
         spinner.text = `downloaded: ${download.processedCount}/${intervals.length}\n`
       }
+      finalDownload = download;
     }
 
-    spinner.stopAndPersist({
-      text: '✅ Segment export complete!',
-    })
+    if (finalDownload?.error) {
+      spinner.stopAndPersist({
+        text: `error downloading files (successfully processed ${finalDownload?.processedCount} before error): ${finalDownload?.error}`,
+      })
+      console.log(finalDownload?.error);
+    } else {
+      spinner.stopAndPersist({
+        text: '✅ Segment export complete!',
+      })
+    }
   }
 
   getStartDate(startDate?: string) {
@@ -108,11 +118,12 @@ export default class GetSegment extends Command {
 
     let processedCount = 0;
     let next = intervalsCopy.pop();
-    while (next !== undefined && sleepTime <= 64000) {
+    while (next !== undefined && sleepTime <= 128000) {
       try {
         await this.downloadFile(next, exportOptions, flags.directory)
+        processedCount++;
         yield {
-          processedCount: ++processedCount,
+          processedCount,
           snoozing: false,
           snoozeLength: 0
         }
@@ -136,6 +147,15 @@ export default class GetSegment extends Command {
         await this.sleep(sleepTime);
         sleepTime = sleepTime * 2;
       }      
+    }
+
+    if (processedCount < intervals.length) {
+      yield {
+        processedCount,
+        snoozing: false,
+        snoozeLength: 0,
+        error: new Error('did not complete all downloads')
+      }
     }
   }
 
