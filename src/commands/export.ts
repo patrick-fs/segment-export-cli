@@ -9,6 +9,12 @@ import * as fsApi from '../api'
 const BATCH_SIZE = 2
 const DATA_DIRECTORY = './data'
 
+interface FetchResult {
+  processedCount: number;
+  snoozing: boolean;
+  snoozeLength: number;
+}
+
 export default class GetSegment extends Command {
   static args = [
     {
@@ -54,7 +60,7 @@ export default class GetSegment extends Command {
       type: flags.type,
       format: flags.format,
     }
-
+     /*
     for (let i = 0; i < intervals.length; i++) {
       try {
         downloads.push(this.downloadFile(intervals[i], exportOptions, flags.directory))
@@ -65,6 +71,15 @@ export default class GetSegment extends Command {
         }
       } catch (error) {
         downloads = []
+      }
+    }
+    */
+
+    for await (const download of this.fetch(intervals)) {
+      if (download.snoozing) {
+        spinner.text = `hit API request quota, snoozing for ${download.snoozeLength/1000} seconds`;
+      } else {
+        spinner.text = `downloaded: ${download.processedCount}/${intervals.length}\n`
       }
     }
 
@@ -101,6 +116,41 @@ export default class GetSegment extends Command {
     
     const interval = Interval.fromDateTimes(start, end)
     return interval.splitBy(segmentDuration)
+  }
+
+  async *fetch(intervals: Interval[]) {
+    const {args, flags} = this.parse(GetSegment)
+    const exportOptions = {
+      segment_id: args.id,
+      type: flags.type,
+      format: flags.format,
+    }
+
+    const intervalsCopy = intervals.slice();
+
+    let processedCount = 0;
+    let next = intervalsCopy.pop();
+    while (next !== undefined) {
+      try {
+        await this.downloadFile(next, exportOptions, flags.directory)
+        yield {
+          processedCount: ++processedCount,
+          snoozing: false,
+          snoozeLength: 0
+        }
+        next = intervalsCopy.pop();
+      } catch (error) {
+        if (error.response && error.response.status === 429) {
+          yield {
+            processedCount,
+            snoozing: true,
+            snoozeLength: 2000
+          }
+          console.log('too many requests, go to sleep');
+        }
+        console.log(error);
+      }      
+    }
   }
 
   async downloadFile<T extends Omit<fsApi.ExportOptions, 'time_range'>>(interval: Interval, exportOptions: T, directory = DATA_DIRECTORY) {
