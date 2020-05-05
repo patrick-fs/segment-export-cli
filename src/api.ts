@@ -39,7 +39,7 @@ export enum ExportFormats {
 const initApi = ({apiKey, baseURL}: { apiKey: string; baseURL: string}) => {
   return axios.create({
     baseURL: baseURL,
-    timeout: 1000,
+    timeout: 10000,
     headers: {
       Authorization: `Basic ${apiKey}`,
       'Content-Type': 'application/json',
