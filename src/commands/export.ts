@@ -7,7 +7,7 @@ import * as zlib from 'zlib'
 import * as fsApi from '../api'
 
 const DATA_DIRECTORY = './data'
-const BATCH_SIZE = 3;
+const BATCH_SIZE = 4;
 
 export default class GetSegment extends Command {
   static args = [
@@ -147,10 +147,12 @@ export default class GetSegment extends Command {
         sleepTime = sleepStart;
       } catch (error) {
         if (error.response && error.response.status === 429) {
+          const retryAfter = parseInt(error.response.headers['retry-after']);
+          console.log(retryAfter);
           yield {
             processedCount,
             snoozing: true,
-            snoozeLength: sleepTime
+            snoozeLength: retryAfter * 1000
           }
         } else {
           yield {
