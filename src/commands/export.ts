@@ -35,14 +35,11 @@ export default class GetSegment extends Command {
 
   async run() {
     const {args, flags} = this.parse(GetSegment)
-    // TODO: validate flags and args formats
-    // or choose a default start...
-    
     const start = this.getStartDate(flags.start);
     const end = this.getEndDate(flags.end);
     const intervals = this.getIntervals(start, end, flags.interval)
 
-    console.log(`dowloading ${args.id}, starting from ${start}, ending ${end}`);
+    console.log(`downloading ${args.id}, starting from ${start}, ending ${end}`);
 
     const spinner = ora('Getting export').start()
     spinner.color = 'yellow'
