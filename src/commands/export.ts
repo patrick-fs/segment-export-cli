@@ -30,7 +30,8 @@ export default class GetSegment extends Command {
       return fsApi.ExportTypes.individual
     }}),
     directory: flags.string({char: 'd', description: 'location of the output directory', default: DATA_DIRECTORY}),
-    interval: flags.string({char: 'i', options: ['5', '10', '15', '30', '60'], default: '15', description: 'time increments for each downloaded file'})
+    interval: flags.string({char: 'i', options: ['5', '10', '15', '30', '60'], default: '15', description: 'time increments for each downloaded file'}),
+    fields: flags.string({char: 'l', description: 'a comma-delimited list of fields to select - for example: EventStart,EventType. Find the Data Export data dictionary of all fields here: https://developer.fullstory.com/get-data-export' }),
   };
 
   async run() {
@@ -107,7 +108,9 @@ export default class GetSegment extends Command {
       segment_id: args.id,
       type: flags.type,
       format: flags.format,
+      fields: flags.fields?.split(',')
     }
+
     const sleepStart = 2000;
 
     const intervalsCopy = intervals.slice();

@@ -9,6 +9,7 @@ export interface ExportOptions {
     start: string;
     end: string;
   };
+  fields?: string[];
 }
 
 export interface OperationResponse {
