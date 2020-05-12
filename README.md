@@ -62,18 +62,18 @@ ARGUMENTS
   ID  [default: everyone] segment id of the segment to be downloaded from FullStory
 
 OPTIONS
-  -d, --directory=directory                  [default: ./data] location of the output directory
-  -e, --end=end                              end of query: mm/dd/yyyy, defaults to yesterday (the most recent day that data is available)
-  -f, --format=JSON|CSV                      [default: FORMAT_CSV]
-  -h, --help                                 show CLI help
-  -i, --interval=5m|10m|15m|30m|1h|2h|3h|4h  [default: 15m] time increments for each downloaded file
+  -d, --directory=directory                      [default: ./data] location of the output directory
+  -e, --end=end                                  end of query: mm/dd/yyyy, defaults to yesterday (the most recent day that data is available)
+  -f, --format=JSON|CSV                          [default: FORMAT_CSV]
+  -h, --help                                     show CLI help
+  -i, --interval=5m|10m|15m|30m|1h|2h|3h|4h|24h  [default: 15m] time increments for each downloaded file
 
-  -l, --fields=fields                        a comma-delimited list of fields to select - for example: EventStart,EventType. Find the Data Export data dictionary of 
-                                             all fields here: https://developer.fullstory.com/get-data-export
+  -l, --fields=fields                            a comma-delimited list of fields to select - for example: EventStart,EventType. Find the Data Export data 
+                                                 dictionary of all fields here: https://developer.fullstory.com/get-data-export
 
-  -s, --start=start                          start of query: mm/dd/yyyy, defaults to 30 days in the past
+  -s, --start=start                              start of query: mm/dd/yyyy, defaults to 30 days in the past
 
-  -t, --type=event|individual                [default: TYPE_EVENT]
+  -t, --type=event|individual                    [default: TYPE_EVENT]
 ```
 
 - `--type event` returns event records: each row is an individual event recorded by FullStory. You can find the data dictionary for
