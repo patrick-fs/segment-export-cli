@@ -30,7 +30,7 @@ export default class GetSegment extends Command {
       return fsApi.ExportTypes.individual
     }}),
     directory: flags.string({char: 'd', description: 'location of the output directory', default: DATA_DIRECTORY}),
-    interval: flags.string({char: 'i', options: ['5', '10', '15', '30', '60'], default: '15', description: 'time increments for each downloaded file'}),
+    interval: flags.string({char: 'i', options: ['5m', '10m', '15m', '30m', '1h', '2h', '3h', '4h'], default: '15m', description: 'time increments for each downloaded file'}),
     fields: flags.string({char: 'l', description: 'a comma-delimited list of fields to select - for example: EventStart,EventType. Find the Data Export data dictionary of all fields here: https://developer.fullstory.com/get-data-export' }),
   };
 
@@ -38,7 +38,7 @@ export default class GetSegment extends Command {
     const {args, flags} = this.parse(GetSegment)
     const start = this.getStartDate(flags.start);
     const end = this.getEndDate(flags.end);
-    const intervals = this.getIntervals(start, end, flags.interval)
+    const intervals = this.getIntervals(start, end, flags.interval?.toUpperCase())
 
     console.log(`downloading ${args.id}, starting from ${start}, ending ${end}`);
 
@@ -93,8 +93,8 @@ export default class GetSegment extends Command {
     return`${dateTime.month}/${dateTime.day}/${dateTime.year}`;
   }
 
-  getIntervals(startDate: string, endDate: string, intervalDuration = '15') {
-    const segmentDuration = Duration.fromISO(`PT${intervalDuration}M`)
+  getIntervals(startDate: string, endDate: string, intervalDuration = '15M') {
+    const segmentDuration = Duration.fromISO(`PT${intervalDuration}`)
     const start = DateTime.fromFormat(startDate, 'D')
     const end = DateTime.fromFormat(endDate, 'D')
     
