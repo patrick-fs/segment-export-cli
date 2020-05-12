@@ -30,7 +30,7 @@ export default class GetSegment extends Command {
       return fsApi.ExportTypes.individual
     }}),
     directory: flags.string({char: 'd', description: 'location of the output directory', default: DATA_DIRECTORY}),
-    interval: flags.string({char: 'i', options: ['5m', '10m', '15m', '30m', '1h', '2h', '3h', '4h'], default: '15m', description: 'time increments for each downloaded file'}),
+    interval: flags.string({char: 'i', options: ['5m', '10m', '15m', '30m', '1h', '2h', '3h', '4h', '24h'], default: '15m', description: 'time increments for each downloaded file'}),
     fields: flags.string({char: 'l', description: 'a comma-delimited list of fields to select - for example: EventStart,EventType. Find the Data Export data dictionary of all fields here: https://developer.fullstory.com/get-data-export' }),
   };
 
