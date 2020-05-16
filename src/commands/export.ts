@@ -43,7 +43,7 @@ export default class GetSegment extends Command {
     const end = this.getEndDate(flags.end);
     const intervals = this.getIntervals(start, end, flags.interval)
 
-    console.log(`dowloading ${args.id}, starting from ${start}, ending ${end}`);
+    console.log(`downloading ${args.id}, starting from ${start}, ending ${end}`);
 
     const spinner = ora('Getting export').start()
     spinner.color = 'yellow'
@@ -147,6 +147,8 @@ export default class GetSegment extends Command {
         sleepTime = sleepStart;
       } catch (error) {
         if (error.response && error.response.status === 429) {
+          console.log(`Retry-After: ${error.response.headers['Retry-After']}`);
+          console.log(`retry-after: ${error.response.headers['retry-after']}`);
           const retryAfter = parseInt(error.response.headers['retry-after']);
           console.log(retryAfter);
           yield {
