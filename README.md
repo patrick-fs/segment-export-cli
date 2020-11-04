@@ -1,13 +1,9 @@
 segex
 =====
 
-`segex` is a command line interface that lets you download FullStory "event" and "individual" data for specific segments.
+`segex` is a command line interface that lets you download FullStory "event" and "individual" data for specific segments via FullStory's [Segment Export API](https://developer.fullstory.com/create-segment-export)
 
 `segex` is not currently distributed on NPM, so you'll have to pull down this code and execute it locally with `./bin/run`. You'll need to have [node JS](https://nodejs.org/en/) installed on your machine to run `segex`.
-
-## This tool is currently in private beta
-
-This tool and the underlying API is available to FullStory customers participating in a private beta of the new Data Export API. If you are interested in participating in the beta, please email support@fullstory.com.
 
 # Install
 
