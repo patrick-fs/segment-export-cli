@@ -13,7 +13,7 @@
     "@oclif/plugin-help": "^2.2.3",
     "@types/luxon": "^1.22.0",
     "@types/mkdirp": "^1.0.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "luxon": "^1.23.0",
     "mkdirp": "^1.0.4",
     "ora": "^4.0.3",
